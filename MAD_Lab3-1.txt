@@ -1,0 +1,299 @@
+MAD_Lab3
+
+MainActivity.java
+
+package com.example.shruthi_lab3;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+    public void add(View view){
+        float num1; float num2; float sum;
+        EditText t1=findViewById(R.id.edit_first_num);
+        EditText t2=findViewById(R.id.edit_num2);
+        TextView t3=findViewById(R.id.txt_result);
+        t3.setText("Result");
+        if(t1.length()==0 || t2.length()==0)
+            Toast.makeText(this, "Enter the values for number1 or number2", Toast.LENGTH_SHORT).show();
+        else{
+            try{
+                num1=Float.parseFloat(t1.getText().toString());
+                num2=Float.parseFloat(t2.getText().toString());
+                sum=num1+num2;
+                t3.setText("Result:"+Float.toString(sum));
+            }
+            catch(NumberFormatException e)
+            {
+                Toast toast=Toast.makeText(getApplicationContext(),"Enter number only",Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+    public void sub(View view){
+        float num1; float num2; float sum;
+        EditText t1=findViewById(R.id.edit_first_num);
+        EditText t2=findViewById(R.id.edit_num2);
+        TextView t3=findViewById(R.id.txt_result);
+        t3.setText("Result");
+        if(t1.length()==0 || t2.length()==0)
+            Toast.makeText(this, "Enter the values for number1 or number2", Toast.LENGTH_SHORT).show();
+        else{
+            try{
+                num1=Float.parseFloat(t1.getText().toString());
+                num2=Float.parseFloat(t2.getText().toString());
+                sum=num1-num2;
+                t3.setText("Result:"+Float.toString(sum));
+            }
+            catch(NumberFormatException e)
+            {
+                Toast toast=Toast.makeText(getApplicationContext(),"Enter number only",Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+    public void mul(View view){
+        float num1; float num2; float sum;
+        EditText t1=findViewById(R.id.edit_first_num);
+        EditText t2=findViewById(R.id.edit_num2);
+        TextView t3=findViewById(R.id.txt_result);
+        t3.setText("Result");
+        if(t1.length()==0 || t2.length()==0)
+            Toast.makeText(this, "Enter the values for number1 or number2", Toast.LENGTH_SHORT).show();
+        else{
+            try{
+                num1=Float.parseFloat(t1.getText().toString());
+                num2=Float.parseFloat(t2.getText().toString());
+                sum=num1*num2;
+                t3.setText("Result:"+Float.toString(sum));
+            }
+            catch(NumberFormatException e)
+            {
+                Toast toast=Toast.makeText(getApplicationContext(),"Enter number only",Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+    public void div(View view){
+        float num1; float num2; float sum;
+        EditText t1=findViewById(R.id.edit_first_num);
+        EditText t2=findViewById(R.id.edit_num2);
+        TextView t3=findViewById(R.id.txt_result);
+        t3.setText("Result");
+        if(t1.length()==0 || t2.length()==0)
+            Toast.makeText(this, "Enter the values for number1 or number2", Toast.LENGTH_SHORT).show();
+        else{
+            try{
+                num1=Float.parseFloat(t1.getText().toString());
+                num2=Float.parseFloat(t2.getText().toString());
+                if(num2!=0){
+                    sum=num1/num2;
+                    t3.setText("Result:"+Float.toString(sum));
+                }
+                else
+                    Toast.makeText(this, "Enter the second number other than 0", Toast.LENGTH_SHORT).show();
+            }
+            catch(NumberFormatException e)
+            {
+                Toast toast=Toast.makeText(getApplicationContext(),"Enter number only",Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+    public void clear_data(View v)
+    {
+        Float num1,num2,sum;
+        EditText t1=findViewById(R.id.edit_first_num);
+        EditText t2=findViewById(R.id.edit_num2);
+        TextView t3=findViewById(R.id.txt_result);
+        t1.setText("");
+        t1.setSelection(0);
+        t2.setText("");
+        t3.setText("Result");
+    }
+}
+
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/txt_num_1"
+        android:layout_width="147dp"
+        android:layout_height="53dp"
+        android:gravity="center"
+        android:text="Second Number"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.094"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.31"
+        tools:ignore="HardcodedText,TextSizeCheck" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="259dp"
+        android:layout_height="44dp"
+        android:background="#3F51B5"
+        android:gravity="center"
+        android:text="Basic Calculator"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.064"
+        tools:ignore="HardcodedText,TextContrastCheck,TextSizeCheck" />
+
+    <TextView
+        android:id="@+id/txt_num"
+        android:layout_width="144dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="124dp"
+        android:gravity="center"
+        android:text="First Number"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.104"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText,MissingConstraints" />
+
+    <EditText
+        android:id="@+id/edit_first_num"
+        android:layout_width="165dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.825"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.193"
+        tools:ignore="Autofill,LabelFor,MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/edit_num2"
+        android:layout_width="162dp"
+        android:layout_height="44dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.827"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.318"
+        tools:ignore="Autofill,LabelFor,MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/txt_result"
+        android:layout_width="283dp"
+        android:layout_height="48dp"
+        android:background="#2196F3"
+        android:gravity="center"
+        android:text="Result will be displayed here"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.445"
+        tools:ignore="HardcodedText,TextSizeCheck" />
+
+    <Button
+        android:id="@+id/btt_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:onClick="add"
+        android:text="Addition"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_result"
+        app:layout_constraintVertical_bias="0.217"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:onClick="sub"
+        android:text="Substraction"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.789"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.62"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_mul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:onClick="mul"
+        android:text="Multiplication"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.751"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_div"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:onClick="div"
+        android:text="Division"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.794"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.751"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_clr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:onClick="clear_data"
+        android:text="Clear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.891"
+        tools:ignore="HardcodedText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

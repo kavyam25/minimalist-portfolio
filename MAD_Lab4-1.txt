@@ -1,0 +1,223 @@
+MAD_Lab4
+
+MainActivity.java
+
+package com.chandru.shruthi_lab4;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    ImageView iv;
+    Button button,button1,button2,button3,button4,button5;
+    Bitmap bitmap;
+    Canvas canvas;
+    Paint paint;
+    Rect rect;
+    int CanvasRadius;
+    int CanvasPadding=7;
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        iv=(ImageView)findViewById(R.id.ivg);
+        button=(Button)findViewById(R.id.btt_rect);
+        button1=(Button)findViewById(R.id.btt_circle);
+        button2=(Button)findViewById(R.id.btt_line);
+        button3=(Button)findViewById(R.id.btt_square);
+        button4=(Button)findViewById(R.id.btt_reset);
+        button5=(Button)findViewById(R.id.btt_exit);
+    }
+    public void Draw_shru(View view)
+    {
+        bitmap=Bitmap.createBitmap(400,250,Bitmap.Config.RGB_565);
+        canvas=new Canvas(bitmap);
+        canvas.drawColor(Color.CYAN);
+        paint=new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(Color.BLUE);
+        paint.setAntiAlias(true);
+
+        if(view == button)
+        {
+            rect=new Rect(55,55,350,200);
+            canvas.drawRect(rect,paint);
+            iv.setImageBitmap(bitmap);
+            Toast toast=Toast.makeText(getApplicationContext(),"Rectangle Image Drawn", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        if(view == button1)
+        {
+            CanvasRadius=Math.min(canvas.getWidth(),canvas.getHeight()/2);
+            canvas.drawCircle(canvas.getWidth()/2,canvas.getHeight()/2,CanvasRadius-CanvasPadding,paint);
+            iv.setImageBitmap(bitmap);
+            Toast toast=Toast.makeText(getApplicationContext(),"Circle Image Drawn", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        if(view == button2)
+        {
+            canvas.drawLine(200,55,200,300,paint);
+            iv.setImageBitmap(bitmap);
+            Toast toast=Toast.makeText(getApplicationContext(),"Straight Line Drawn", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        if(view == button3)
+        {
+            rect=new Rect(55,55,200,200);
+            canvas.drawRect(rect,paint);
+            iv.setImageBitmap(bitmap);
+            Toast toast=Toast.makeText(getApplicationContext(),"Square Drawn", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        if(view == button4)
+        {
+            iv.setImageDrawable(null);
+
+        }
+        if(view == button5)
+        {
+            finish();
+        }
+    }
+}
+
+
+activity_main.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="338dp"
+        android:layout_height="55dp"
+        android:background="#2196F3"
+        android:gravity="center"
+        android:text="Drawing the Shapes"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.087"
+        tools:ignore="HardcodedText,TextSizeCheck" />
+
+    <ImageView
+        android:id="@+id/ivg"
+        android:layout_width="214dp"
+        android:layout_height="159dp"
+        android:contentDescription="TODO"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.303"
+        tools:ignore="ContentDescription,HardcodedText,ImageContrastCheck"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/btt_rect"
+        android:layout_width="127dp"
+        android:layout_height="56dp"
+        android:onClick="Draw_shru"
+        android:text="Rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.569"
+        tools:ignore="HardcodedText,TextSizeCheck,VisualLintOverlap" />
+
+    <Button
+        android:id="@+id/btt_circle"
+        android:layout_width="127dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="248dp"
+        android:onClick="Draw_shru"
+        android:text="Circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.569"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_line"
+        android:layout_width="127dp"
+        android:layout_height="54dp"
+        android:onClick="Draw_shru"
+        android:text="Line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.721"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_square"
+        android:layout_width="120dp"
+        android:layout_height="59dp"
+        android:onClick="Draw_shru"
+        android:text="Square"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.868"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.722"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_reset"
+        android:layout_width="129dp"
+        android:layout_height="58dp"
+        android:onClick="Draw_shru"
+        android:text="Clear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.893"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btt_exit"
+        android:layout_width="126dp"
+        android:layout_height="55dp"
+        android:onClick="Draw_shru"
+        android:text="Exit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.894"
+        tools:ignore="HardcodedText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

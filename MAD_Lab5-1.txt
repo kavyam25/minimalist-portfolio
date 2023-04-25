@@ -1,0 +1,399 @@
+MAD_Lab5
+
+MainActivity.java
+
+package com.example.shruthi_lab5;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    DBHelper mydb;
+    EditText ename,esurname,eid;
+    TextView tv_chow;
+    Button btt_add,btt_view,btt_del,btt_update,btt_cls;
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mydb= new DBHelper(this);
+        eid=findViewById(R.id.ed_id);
+        ename=findViewById(R.id.ed_name);
+        esurname=findViewById(R.id.ed_surname);
+        btt_add=findViewById(R.id.button_add);
+        btt_update=findViewById(R.id.button_update);
+        btt_del=findViewById(R.id.button_delete);
+        btt_view=findViewById(R.id.button_view);
+        btt_cls=findViewById(R.id.button_clear);
+        tv_chow=findViewById(R.id.txt_data_display);
+
+        AddData();
+        viewALLData();
+        UpdateData();
+        DeleteData();
+        ClearData();
+    }
+
+    private void ClearData()
+    {
+        btt_cls.setOnClickListener((view ->
+        {
+            ename.setText("");
+            eid.setText("");
+            esurname.setText("");
+            ename.requestFocus();
+        }));
+    }
+
+    public void viewALLData()
+    {
+        btt_view.setOnClickListener((view ->
+        {
+            Cursor res=mydb.getAllData();
+
+            if(res.getCount()==0)
+                Toast.makeText(this, "NO DATA", Toast.LENGTH_SHORT).show();
+            else
+            {
+                StringBuffer buffer =new StringBuffer();
+                while(res.moveToNext())
+                {
+                    buffer.append("Id:"+res.getString(0)+"\t");
+                    buffer.append("Name:"+res.getString(1)+"\t");
+                    buffer.append("SurName:"+res.getString(2)+"\t");
+                    buffer.append("\n");
+                }
+                tv_chow.setText("Data from Database \n"+buffer.toString());
+            }
+        }));
+    }
+
+    public void UpdateData()
+    {
+        btt_update.setOnClickListener((view ->
+        {
+            boolean ud=mydb.updateData(eid.getText().toString(),ename.getText().toString(),esurname.getText().toString());
+            if(ud==true)
+                Toast.makeText(this, "Record updated", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Record not updated", Toast.LENGTH_SHORT).show();
+        }));
+    }
+
+    public void AddData()
+    {
+        btt_add.setOnClickListener((view ->
+        {
+            boolean isinserted=mydb.insertData(eid.getText().toString(),ename.getText().toString(),esurname.getText().toString());
+            if(isinserted==true)
+                Toast.makeText(this, "Record is not inserted", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Record is inserted", Toast.LENGTH_SHORT).show();
+
+        }));
+    }
+
+    public void DeleteData()
+    {
+        btt_del.setOnClickListener((view ->
+        {
+            Integer dr=mydb.DeleteData(eid.getText().toString());
+            if(dr>0)
+                Toast.makeText(this, "Record is Deleted", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Record is not Deleted", Toast.LENGTH_SHORT).show();
+
+        }));
+    }
+}
+
+
+DBHelper.java
+
+
+package com.example.shruthi_lab5;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class DBHelper extends SQLiteOpenHelper {
+
+    public static final String database_name="student.db",tablename="student_table",col_1="id",col_2="Name",col_3="Surname";
+
+    public DBHelper(@Nullable Context context)
+    {
+        super(context,database_name,null,1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String query=("Create Table "+tablename+"(Id Integer Primary key Autoincrement,Name Text,Surname Text)");
+        db.execSQL(query);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("Drop Table If Exists "+tablename);
+        onCreate(db);
+    }
+
+    public boolean insertData(String id,String Name,String Surname)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        if(id.length()==0 || Name.length()==0 ||Surname.length()==0)
+        {
+            return false;
+        }
+        else
+        {
+            contentValues.put(col_1,id);
+            contentValues.put(col_2,Name);
+            contentValues.put(col_3,Surname);
+            long result=db.insert(tablename,null,contentValues);
+            if(result==1)
+                return true;
+            else
+                return false;
+        }
+    }
+
+    public Cursor getAllData()
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor res=db.rawQuery("select * from "+tablename,null);
+        return res;
+    }
+
+    public boolean updateData(String id,String Name,String Surname)
+    {
+        int i;
+        SQLiteDatabase db=this.getWritableDatabase();
+        if(id.length()==0 || Name.length()==0 ||Surname.length()==0)
+        {
+            return false;
+        }
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(col_1,id);
+        contentValues.put(col_2,Name);
+        contentValues.put(col_3,Surname);
+        i=db.update(tablename,contentValues,"Id=?",new String[]{id});
+        if(i>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public Integer DeleteData(String id)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        return db.delete(tablename,"Id=?",new String[]{id});
+    }
+}
+
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:text="Clear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_add"
+        app:layout_constraintVertical_bias="0.414" />
+
+    <Button
+        android:id="@+id/button_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:text="View All"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.733"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.633" />
+
+    <Button
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.633" />
+
+    <Button
+        android:id="@+id/button_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:text="Update"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.707"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.523" />
+
+    <EditText
+        android:id="@+id/ed_surname"
+        android:layout_width="190dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.864"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.285"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="301dp"
+        android:layout_height="49dp"
+        android:background="#2196F3"
+        android:gravity="center"
+        android:text="DataBase Connectivity"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
+
+    <TextView
+        android:id="@+id/txt_name"
+        android:layout_width="140dp"
+        android:layout_height="52dp"
+        android:text="Name"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.189" />
+
+    <TextView
+        android:id="@+id/txt_surname"
+        android:layout_width="140dp"
+        android:layout_height="53dp"
+        android:text="SurName"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.286" />
+
+    <TextView
+        android:id="@+id/txt_id"
+        android:layout_width="136dp"
+        android:layout_height="56dp"
+        android:text="ID"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.098"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.392" />
+
+    <EditText
+        android:id="@+id/ed_name"
+        android:layout_width="190dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.864"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.188"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/ed_id"
+        android:layout_width="191dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.868"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.396"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/button_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3F51B5"
+        android:text="Add Data"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.523" />
+
+    <TextView
+        android:id="@+id/txt_data_display"
+        android:layout_width="343dp"
+        android:layout_height="144dp"
+        android:background="#2196F3"
+        android:text="The result will be displayed here"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.974" />
+</androidx.constraintlayout.widget.ConstraintLayout>

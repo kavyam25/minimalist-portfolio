@@ -1,0 +1,111 @@
+Lab_1
+
+Mainactivity.java
+
+package com.example.divya_l1;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.graphics.Typeface;
+import android.os.Bundle;
+
+
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+    ListView lv;
+
+    TextView tv;
+
+    String[] li;
+    @SuppressLint({"MissingInflaterId", "MissingInflatedId"})
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        li = getResources().getStringArray(R.array.li_contact);
+        lv = findViewById(R.id.ListView);
+        tv = findViewById(R.id.pc);
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter( this,android.R.layout.simple_list_item_1,android.R.id.text1,li);
+
+        lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener(((adapterView, view, i, l) -> {
+
+            String value = adapter.getItem(i);
+            tv.setText(value);
+            tv.setTypeface( null, Typeface.ITALIC);
+        }));
+
+    }
+}
+
+Strings.xml
+
+<resources>
+    <string name="app_name">Divya_L1</string>
+    <string name="name">Selected Phone Contacts Will DisplayHere</string>
+    <string-array name="li_contact">
+        <item>Kavya 961980629</item>
+        <item>usha 8687574375</item>
+        <item>shruthi 8762754324</item>
+        <item>nanditha 646513416</item>
+        <item> yashu 645653686</item>
+        <item>bhuvana 5764563675</item>
+        <item>priya 564563513</item>
+    </string-array>
+</resources>
+
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#F48236"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/ListView"
+        android:layout_width="330dp"
+        android:layout_height="480dp"
+        android:background="#FF7A22"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pc" />
+
+    <TextView
+        android:id="@+id/pc"
+        android:layout_width="330dp"
+        android:layout_height="81dp"
+        android:layout_marginBottom="152dp"
+        android:background="#FFD500"
+        android:text="Divya"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
